@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Product\CreateProductRequest;
 use App\Http\Requests\Api\Product\UpdateProductRequest;
 use App\Models\Product;
 use App\Services\ProductService;
@@ -45,6 +46,8 @@ class ProductController extends Controller
     
 
 
+
+
     public function update(UpdateProductRequest $updateProductRequest,Product $product)
     {
 
@@ -62,4 +65,32 @@ class ProductController extends Controller
 
     }
 
+
+    public function store(CreateProductRequest $createProductRequest) 
+    {
+        // Xác thực và lấy dữ liệu đã được xác thực
+        $requestData = $createProductRequest->validated();
+
+        // Gọi phương thức create của ProductService để thêm sản phẩm
+        $result = $this->productService->create($requestData);
+
+        if ($result) {
+            // Chuyển hướng đến danh sách sản phẩm với thông báo thành công
+            return redirect()->route('items.index')->with('success', 'Sản phẩm đã được thêm thành công.');
+        }
+
+        // Trả về phản hồi JSON nếu có lỗi
+        return response()->json([
+            'message' => 'Đã xảy ra lỗi khi tạo sản phẩm.'
+        ], 500); // Mã lỗi 500 cho lỗi server
+    }
+     
+    public function detail(Product $product)
+    {
+        return view(view:'products.detail', data :['Items' => $product]);
+    }
+
 }
+
+
+

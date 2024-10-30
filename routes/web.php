@@ -20,7 +20,15 @@ Route::get('/', function () {
 });
 
 
-Route::get('/products',action: [ProductController::class,'index'])->name('items.index');
-Route::get('/products/{product}',action: [ProductController::class,'show']);
-Route::delete('/products/{product}',action: [ProductController::class,'delete'])->name('items.destroy');
-Route::put('/products/{product}',action: [ProductController::class,'update'])->name('items.update');
+
+Route::group(['prefix'=>'products'], function(){
+    // Route::post('/{product}',action: [ProductController::class,'store'])->name('items.store');
+    Route::post('/', [ProductController::class, 'store'])->name('items.store');
+
+    Route::get('/',action: [ProductController::class,'index'])->name('items.index');
+    Route::get('/{product}',action: [ProductController::class,'show']);
+    Route::delete('/{product}',action: [ProductController::class,'delete'])->name('items.destroy');
+    Route::put('/{product}',action: [ProductController::class,'update'])->name('items.update');
+    Route::get('/{product}',action: [ProductController::class,'detail'])->name('items.detail');
+   
+});

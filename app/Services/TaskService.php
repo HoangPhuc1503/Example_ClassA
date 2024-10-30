@@ -37,4 +37,9 @@ class TaskService {
             return false;
         }
     }
+
+    public function getlist()
+    {
+        return $this->model->orderBy("id","desc" )->where('status',1);
+    }
 }

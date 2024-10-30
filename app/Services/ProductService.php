@@ -41,6 +41,29 @@ class ProductService
         }
     }
 
+    // public function create($request)
+    // {
+    //     try{
+    //         return $this->product->create($request);                      
+            
+    //     }catch(Exception $exception){
+    //         log::error($exception);
+            
+    //         return false;
+    //     }
+    // }
+    public function create($request) 
+    {
+        try {
+            // Tạo sản phẩm mới và trả về kết quả
+            return $this->product->create($request);
+        } catch (Exception $exception) {
+            // Ghi log lỗi
+            Log::error($exception);
 
-    
+            // Trả về false để cho biết có lỗi xảy ra
+            return false;
+        }
+    }
+
 }

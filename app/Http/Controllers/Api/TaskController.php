@@ -8,6 +8,7 @@ use App\Http\Requests\Api\Task\UpdateRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Services\TaskService;
+use App\Providers\ResponseServiceProvider;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -18,9 +19,11 @@ class TaskController extends Controller
         $this->taskService = $taskService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(['message' => 'Hello World!']);
+        $result = $this->taskService->getlist();
+
+        return TaskResource::apiPaginate($result,$request);
     }
 
     public function store(CreateRequest $createRequest)
@@ -29,7 +32,8 @@ class TaskController extends Controller
         $result = $this->taskService->create($request);
 
         if ($result) {
-            return response()->api_success('create success', $result);
+            // return response()->api_success('create success', $result);
+            return response()->api_success('created success',$result);
         }
 
         return response()->json([
